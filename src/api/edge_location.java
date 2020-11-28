@@ -5,6 +5,7 @@ package api;
  * on an edge - between two consecutive nodes).
  */
 public interface edge_location {
+
     /**
      * Returns the edge on which the location is.
      * @return

@@ -6,7 +6,6 @@ public class edge implements edge_data {
     private double weight;
     private String info;
     private int tag;
-
     public edge(node_data s, node_data d, double w){
         this.src = s;
         this.dest = d;
@@ -14,6 +13,17 @@ public class edge implements edge_data {
         this.info = "White";
         this.tag = -1;
     }
+
+
+    public edge(edge_data other){
+        edge e = (edge)other;
+        this.src = new node(e.src);
+        this.dest = new node(e.dest);
+        this.weight = other.getWeight();
+        this.info = other.getInfo();
+        this.tag = other.getTag();
+    }
+
 
     @Override
     public int getSrc() {

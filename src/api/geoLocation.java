@@ -1,13 +1,25 @@
 package api;
 
+/**
+ * This class ia an implementation of geo_location interface.
+ * geoLocation represents a geo location <x,y,z>, aka Point3D
+ */
+
 public class geoLocation implements geo_location {
 
     private double x,y,z;
+
 
     public geoLocation(double x1 , double y1, double z1){
         this.x = x1;
         this.y = y1;
         this.z = z1;
+    }
+    public geoLocation(geo_location other){
+        this.x = other.x();
+        this.y = other.y();
+        this.z = other.z();
+
     }
 
     @Override
