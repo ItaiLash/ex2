@@ -1,5 +1,7 @@
 package api;
 
+import java.util.Objects;
+
 /**
  * This class ia an implementation of geo_location interface.
  * geoLocation represents a geo location <x,y,z>, aka Point3D
@@ -44,6 +46,25 @@ public class geoLocation implements geo_location {
         double nz = Math.pow(this.z-g.z(),2);
         double distance = Math.sqrt(nx+ny+nz);
         return distance;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        geoLocation that = (geoLocation) o;
+        return Double.compare(that.x, x) == 0 &&
+                Double.compare(that.y, y) == 0 &&
+                Double.compare(that.z, z) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
+    }
+
+    @Override
+    public String toString() {
+        return "(" +this.x + ", " + this.y + ", " + this.z + ")";
     }
 }
