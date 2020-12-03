@@ -1,5 +1,7 @@
 package api;
 
+import java.util.Objects;
+
 /**
  * This class is an implementation of node_data interface.
  * node class implement set of operations applicable on a
@@ -24,7 +26,7 @@ public class node implements node_data,Comparable<node> {
     private String info;
     private int tag;
     private static int uniqueKey = 0;
-    private double dis = Double.MAX_VALUE;;
+    private double dis = Double.MAX_VALUE;
     private node_data pre = null;
 
     public node(geo_location l,double w){
@@ -122,5 +124,23 @@ public class node implements node_data,Comparable<node> {
     @Override
     public int compareTo(node o) {
         return Double.compare(this.getDis(), o.getDis());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        node node = (node) o;
+        return key == node.key &&
+                Double.compare(node.weight, weight) == 0 &&
+                tag == node.tag &&
+                Double.compare(node.dis, dis) == 0 &&
+                location.equals(node.location) &&
+                info.equals(node.info);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, location, weight, info, tag, dis, pre);
     }
 }

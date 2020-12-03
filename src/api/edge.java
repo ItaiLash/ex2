@@ -1,15 +1,18 @@
 package api;
 
+import java.util.Objects;
+
 public class edge implements edge_data {
-    private node_data src;
-    private node_data dest;
-    private double weight;
+    private int src;
+    private int dest;
+    private double w;
     private String info;
     private int tag;
-    public edge(node_data s, node_data d, double w){
+
+    public edge(int s, int d, double w){
         this.src = s;
         this.dest = d;
-        this.weight = w;
+        this.w = w;
         this.info = "White";
         this.tag = -1;
     }
@@ -17,9 +20,9 @@ public class edge implements edge_data {
 
     public edge(edge_data other){
         edge e = (edge)other;
-        this.src = new node(e.src);
-        this.dest = new node(e.dest);
-        this.weight = other.getWeight();
+        this.src = e.src;
+        this.dest = e.dest;
+        this.w = other.getWeight();
         this.info = other.getInfo();
         this.tag = other.getTag();
     }
@@ -27,17 +30,17 @@ public class edge implements edge_data {
 
     @Override
     public int getSrc() {
-        return this.src.getKey();
+        return this.src;
     }
 
     @Override
     public int getDest() {
-        return this.dest.getKey();
+        return this.dest;
     }
 
     @Override
     public double getWeight() {
-        return this.weight;
+        return this.w;
     }
 
     @Override
@@ -62,6 +65,23 @@ public class edge implements edge_data {
 
     @Override
     public String toString() {
-        return src + "--" + this.weight + "-->" + dest;
+        return src + "--" + this.w + "-->" + dest;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        edge edge = (edge) o;
+        return Double.compare(edge.w, w) == 0 &&
+                tag == edge.tag &&
+                src == edge.src  &&
+                dest == edge.dest &&
+                info.equals(edge.info);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(src, dest, w, info, tag);
     }
 }

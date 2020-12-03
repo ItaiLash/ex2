@@ -39,21 +39,4 @@ public class edgeLocation implements edge_location{
         }
         return -1;
     }
-
-    public static void main(String[] args) {
-        directed_weighted_graph g = new DWGraph_DS();
-        geo_location g1 = new geoLocation(0,0,0);
-        geo_location g2 = new geoLocation(3,3,3);
-        node_data n1 = new node(g1,1);
-        node_data n2 = new node(g2,2);
-        g.addNode(n1);
-        g.addNode(n2);
-        g.connect(0,1,0.5);
-        geo_location g3 = new geoLocation(2,2,2);
-        edgeLocation el = new edgeLocation(g,g3);
-        System.out.println(el.getEdge());
-        System.out.println(el.getRatio());
-
-
-    }
 }

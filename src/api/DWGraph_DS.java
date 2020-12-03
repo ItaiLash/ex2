@@ -1,7 +1,5 @@
 package api;
 
-import jdk.swing.interop.DispatcherWrapper;
-
 import java.util.*;
 
 public class DWGraph_DS implements directed_weighted_graph{
@@ -78,12 +76,12 @@ public class DWGraph_DS implements directed_weighted_graph{
         if(src == dest){ return; }
 
         if(this.getEdge(src,dest)!=null && edges.get(src).get(dest).getWeight() != w) {
-            edge_data e = new edge(getNode(src), getNode(dest), w);
+            edge_data e = new edge(src, dest, w);
             edges.get(src).put(dest,e);
             modeCounter++;
         }
         else if(nodes.containsKey(src) && nodes.containsKey(dest) && this.getEdge(src,dest) == null){
-            edge_data e = new edge(getNode(src), getNode(dest), w);
+            edge_data e = new edge(src, dest, w);
             edges.get(src).put(dest, e);
             modeCounter++;
             numOfEdges++;
@@ -103,7 +101,6 @@ public class DWGraph_DS implements directed_weighted_graph{
     @Override
     public node_data removeNode(int key) {
         int size = edges.get(key).size();
-        //edges.get(key).clear();
         edges.remove(key);
         numOfEdges-=size;
         modeCounter+=size;
@@ -154,7 +151,6 @@ public class DWGraph_DS implements directed_weighted_graph{
         DWGraph_DS that = (DWGraph_DS) o;
         return numOfNodes == that.numOfNodes &&
                 numOfEdges == that.numOfEdges &&
-                modeCounter == that.modeCounter &&
                 Objects.equals(nodes, that.nodes) &&
                 Objects.equals(edges, that.edges);
     }
@@ -189,6 +185,7 @@ public class DWGraph_DS implements directed_weighted_graph{
                 '}';
     }
 
+
     public static void main(String[] args) {
         directed_weighted_graph g = new DWGraph_DS();
         geo_location l0 = new geoLocation(0,0,0);
@@ -211,9 +208,12 @@ public class DWGraph_DS implements directed_weighted_graph{
         g.connect(3,2,1.2);
         System.out.println(g);
         directed_weighted_graph g2 = new DWGraph_DS(g);
+        boolean b = g.equals(g2);
+        System.out.println("Before" + b);
         System.out.println(g2);
         g2.removeNode(0);
-        System.out.println("After deletion:");
+        boolean c = g.equals(g2);
+        System.out.println("After deletion:" + c);
         System.out.println(g);
         System.out.println(g2);
 
