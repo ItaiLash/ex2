@@ -34,7 +34,7 @@ class DWGraph_DSTest {
             y = _rnd.nextDouble();
             z = _rnd.nextDouble();
             location = new geoLocation(x,y,z);
-            n = new node(location,i);
+            n = new node(location);
             g.addNode(n);
         }
         int[] nodes = nodes(g);

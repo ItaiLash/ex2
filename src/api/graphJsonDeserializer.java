@@ -21,7 +21,7 @@ public class graphJsonDeserializer implements JsonDeserializer<directed_weighted
             double y = Double.parseDouble(arr[1]);
             double z = Double.parseDouble(arr[2]);
             geo_location pos = new geoLocation(x, y, z);
-            node_data n = new node(key, pos, 0, "White", -1, Double.MAX_VALUE, null);
+            node_data n = new node(key, pos, 0, "White", -1);
             graph.addNode(n);
         }
 

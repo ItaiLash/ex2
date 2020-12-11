@@ -4,19 +4,29 @@ import java.util.Objects;
 
 /**
  * This class ia an implementation of geo_location interface.
- * geoLocation represents a geo location <x,y,z>, aka Point3D
+ * geoLocation represents a geo location <x,y,z>, aka Point3D.
+ * @author itai.lashover&liav.weiss
  */
-
 public class geoLocation implements geo_location {
 
     private double x,y,z;
 
-
+    /**
+     * constructor by variables.
+     * @param x1
+     * @param y1
+     * @param z1
+     */
     public geoLocation(double x1 , double y1, double z1){
         this.x = x1;
         this.y = y1;
         this.z = z1;
     }
+
+    /**
+     * Deep copy constructor.
+     * @param other - geo_location
+     */
     public geoLocation(geo_location other){
         this.x = other.x();
         this.y = other.y();
@@ -39,6 +49,11 @@ public class geoLocation implements geo_location {
         return this.z;
     }
 
+    /**
+     * Returns the distance between two nodes.
+     * @param g - geo_location
+     * @return the distance between this and g.
+     */
     @Override
     public double distance(geo_location g) {
         double nx = Math.pow(this.x-g.x(),2);
@@ -48,6 +63,23 @@ public class geoLocation implements geo_location {
         return distance;
     }
 
+    /**
+     * toString method.
+     * @return geo_location as String.
+     */
+    @Override
+    public String toString() {
+        return  +this.x + ", " + this.y + ", " + this.z;
+    }
+
+    /**
+     * Returns true if this are equal to another geo_location.
+     * Consequently, if both arguments are null, true is returned
+     * and if exactly one argument is null, false is returned.
+     * Otherwise, equality is determined by comparing all the fields of the object.
+     * @param o - an Object.
+     * @return true if the arguments are equal to each other and false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,13 +90,12 @@ public class geoLocation implements geo_location {
                 Double.compare(that.z, z) == 0;
     }
 
+    /**
+     * Override hashcode because equals changed.
+     * @return hashcode.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z);
-    }
-
-    @Override
-    public String toString() {
-        return  +this.x + ", " + this.y + ", " + this.z;
     }
 }

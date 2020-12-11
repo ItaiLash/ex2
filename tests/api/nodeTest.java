@@ -10,12 +10,12 @@ class nodeTest {
 
     public void nodeDefaultCreator(){
         g = new geoLocation(2,1,0);
-        n = new node(g,2.4);
+        n = new node(g);
     }
 
     public void nodeCreator(){
         g = new geoLocation(-2,7,3.1);
-        n = new node(4, g, -2.7, "Green", 4, Double.MAX_VALUE, null);
+        n = new node(4, g, -2.7, "Green", 4);
     }
 
     @Test
@@ -31,10 +31,7 @@ class nodeTest {
         assertEquals(info,"White");
         int tag = n.getTag();
         assertEquals(tag,-1);
-        double dis = n.getDis();
-        assertEquals(dis,Double.MAX_VALUE);
-        node_data pre = n.getPre();
-        assertNull(pre);
+
     }
 
     @Test
