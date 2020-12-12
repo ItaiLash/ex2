@@ -1,21 +1,21 @@
 package api;
 
-import okio.Timeout;
-import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.*;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DWGraph_DSTest {
 
-    private static directed_weighted_graph g;
+    private static directed_weighted_graph g = new DWGraph_DS();
+    private static directed_weighted_graph g2 = new DWGraph_DS();
+    private static directed_weighted_graph g3 = new DWGraph_DS();
     private static Random _rnd = null;
     private static geo_location location = null;
+
 
     /**Returns weighted_graph g after random add of v_size nodes and e_size edge.
      *
@@ -24,8 +24,7 @@ class DWGraph_DSTest {
      * @param seed - seed
      * @return weighted_graph g after initialize.
      */
-    public static directed_weighted_graph graph_creator(int v_size, int e_size, int seed) {
-        g = new DWGraph_DS();
+    public static directed_weighted_graph graph_creator(int v_size, int e_size, int seed, directed_weighted_graph g) {
         _rnd = new Random(seed);
         double x,y,z;
         node_data n;
@@ -76,186 +75,169 @@ class DWGraph_DSTest {
         return ans;
     }
 
-    @Test
-    public void graphCreatorTestRuntime() throws Exception{
-        int v = 100000, e = v*10;
-        assertTimeout(Duration.ofSeconds(5),() ->{
-            g = graph_creator(v,e,1);
-        });
+    @BeforeAll
+    public static void createGraph(){
+        //create graph g
+        graph_creator(5,7,1,g);
+
+        //create graph g2
+        int v = 10;
+        int e = 15;
+        graph_creator(v,e,1,g2);
+
+        //create graph g3
+        int v1 = 10;
+        int e1 = 15;
+        graph_creator(v1,e1,1,g3);
     }
 
-    @Test
-    public void graphCopyTestRuntime() throws Exception{
-        int v = 100000, e = v*10;
-        g = graph_creator(v,e,1);
-        assertTimeout(Duration.ofSeconds(5),() ->{
-            directed_weighted_graph gra = new DWGraph_DS(g);
-        });
-    }
 
     @Test
+    @Order(1)
     void getNodeDoesNotExist() {
-        graph_creator(5,7,1);
         assertNull(g.getNode(6));
     }
 
-
-
     @Test
+    @Order(2)
     void getEdge() {
-        graph_creator(5,7,1);
         assertNull(g.getEdge(0,1));
+        System.out.println(g);
         assertNotNull(g.getEdge(1,0));
     }
 
-
-
-
     @Test
+    @Order(3)
     void addExistingNode() {
-        graph_creator(5,7,1);
         directed_weighted_graph g2 = new DWGraph_DS(g);
         g2.addNode(g2.getNode(0));
         assertEquals(g2,g);
 
     }
-/*
+
     @Test
+    @Order(4)
+    void removeNode() {
+        int v = 10;
+        int e = 15;
+        System.out.println(g2);
+        g2.removeNode(11);
+        assertEquals(v-1, g2.nodeSize());
+        assertEquals(e-4, g2.edgeSize());
+        assertNull(g2.removeNode(15));
+    }
+
+    @Test
+    @Order(5)
     void connect() {
-        g = new DWGraph_DS();
+        directed_weighted_graph g1 = new DWGraph_DS();
         for(int i=0 ; i<3 ; i++){
-            g.addNode(i);
+            node n = new node(new geoLocation(i,i,i));
+            g1.addNode(n);
         }
-        g.connect(1,2,2.5);
-        g.connect(0,3,1);
-        g.removeEdge(0,1);
-        assertNull(g.getEdge(0,1));
-        g.connect(0,1,1.5);
-        edge_data e = new edge()
-        assertEquals(g.getEdge(0,1),);
-        g.connect(1,2,4.7);
-        assertEquals(4.7,g.getEdge(1,2));
+        System.out.println(g1);
+        g1.connect(25,26,2.5);
+        DWGraph_DS g4 = new DWGraph_DS(g1);
+        g1.connect(25,28,1);
+        assertEquals(g1,g4);
+        g1.removeEdge(25,26);
+        assertNull(g1.getEdge(15,16));
+        g1.connect(25,26,1.5);
+        edge_data e = new edge(25,26,1.5);
+        assertEquals(g1.getEdge(25,26),e);
+        g1.connect(26,27,4.7);
+        assertEquals(4.7,g1.getEdge(26,27).getWeight());
+        assertThrows(RuntimeException.class, () -> g1.connect(27,25,-2.5));
     }
 
-    @Test
-    void removeNode() {
-        int v = 10;
-        int e = 15;
-        g = graph_creator(v,e,1);
-        g.removeNode(0);
-        g.removeNode(0);
-        g.removeNode(1);
-        assertEquals(g.nodeSize(),v-2);
-        assertEquals(g.edgeSize(),e-4);
-    }
 
     @Test
+    @Order(6)
     void removeEdge() {
         int v = 10;
         int e = 15;
-        g = graph_creator(v,e,1);
-        System.out.println(g);
-        g.removeEdge(3,0);
-        g.removeEdge(4,2);
-        g.removeEdge(1,1);
-        assertEquals(g.edgeSize(),e-1);
-    }
+        System.out.println(g3);
+        g3.removeEdge(16,21);
+        g3.removeEdge(17,19);
+        g3.removeEdge(17,22);
+        assertEquals(v, g3.nodeSize());
+        assertEquals(e-3, g3.edgeSize());
+        assertNull(g3.removeEdge(22,20));  //edge does not exist
+        assertNull(g3.removeEdge(22,25));  //node 25 does not exist
 
+
+    }
     @Test
+    @Order(7)
     void nodeSize() {
-        g = new WGraph_DS();
-        g.addNode(0);
-        g.addNode(1);
-        g.addNode(2);
-        g.addNode(3);
-        g.addNode(1);
-        g.addNode(0);
-        g.removeNode(0);
-        g.removeNode(2);
-        g.removeNode(2);
         int size = g.nodeSize();
-        Assertions.assertEquals(2,size);
+        g.removeNode(0);
+        g.removeNode(0);     //node does not exist
+        g.removeNode(5);     //node does not exist
+        assertEquals(size-1,g.nodeSize());
     }
 
     @Test
+    @Order(8)
     void edgeSize() {
-        g = graph_creator(10,20,1);
-        g.removeEdge(0,4);
-        g.removeEdge(0,4);      //edge does not exist
-        g.removeEdge(3,9);
-        g.removeEdge(0,1);      //edge does not exist
         int size = g.edgeSize();
-        Assertions.assertEquals(18,size);
+        g.removeEdge(1,2);
+        g.removeEdge(1,3);      //edge does not exist
+        Assertions.assertEquals(size-1,g.edgeSize());
     }
 
 
     @Test
+    @Order(9)
     void testEquals() {
-        g = graph_creator(100,1000,1);
-        weighted_graph g2 = new WGraph_DS(g);
-        assertEquals(g,g2);
-    }
-
-
-    @Test
-    void getNode() {
-    }
-
-    @Test
-    void getEdge() {
+        directed_weighted_graph gra = new DWGraph_DS();
+        graph_creator(100,1000,1,gra);
+        directed_weighted_graph copy = new DWGraph_DS(gra);
+        assertEquals(gra,copy);
+        gra.removeNode(100);
+        assertNotEquals(gra,copy);
     }
 
     @Test
-    void addNode() {
-    }
-
-    @Test
-    void connect() {
-    }
-
-    @Test
+    @Order(10)
     void getV() {
+        directed_weighted_graph dGraph = new DWGraph_DS();
+        assertEquals(0, dGraph.getV().size());
+        node_data n = new node(new geoLocation(0,0,0));
+        dGraph.addNode(n);
+        dGraph.addNode(n);
+        assertEquals(1, dGraph.getV().size());
     }
 
     @Test
+    @Order(11)
     void getE() {
+    directed_weighted_graph dGraph = new DWGraph_DS();
+    node_data n1 = new node(new geoLocation(0,0,0));
+    node_data n2 = new node(new geoLocation(0,0,0));
+    dGraph.addNode(n1);
+    dGraph.addNode(n2);
+    dGraph.connect(n1.getKey(), n2.getKey(), 1);
+    assertEquals(1, dGraph.getE(n1.getKey()).size());
+    assertEquals(0, dGraph.getE(n2.getKey()).size());
     }
 
     @Test
-    void removeNode() {
+    @Order(12)
+    public void graphCreatorTestRuntime() throws Exception{
+        int v = 100000, e = v*10;
+        assertTimeout(Duration.ofSeconds(5),() ->{
+            g = graph_creator(v,e,1,g);
+        });
     }
 
     @Test
-    void removeEdge() {
+    @Order(13)
+    public void graphCopyTestRuntime() throws Exception{
+        int v = 100000, e = v*10;
+        g = graph_creator(v,e,1,g);
+        assertTimeout(Duration.ofSeconds(5),() ->{
+            directed_weighted_graph gra = new DWGraph_DS(g);
+        });
     }
-
-    @Test
-    void nodeSize() {
-    }
-
-    @Test
-    void edgeSize() {
-    }
-
-    @Test
-    void getMC() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
-    }
-
-    @Test
-    void main() {
-    }
-
-     */
 }

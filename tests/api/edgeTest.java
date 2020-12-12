@@ -43,4 +43,14 @@ class edgeTest {
 
     }
 
+    @Test
+    void negativeWeight() {
+        geo_location g1 = new geoLocation(0,0,0);
+        geo_location g2 = new geoLocation(1,1,1);
+        n1 = new node(g1);
+        n2 = new node(g2);
+        double w = -1;
+        assertThrows(RuntimeException.class, () -> new edge(n1.getKey(),n2.getKey(),w));
+    }
+
 }

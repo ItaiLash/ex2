@@ -26,7 +26,7 @@ class nodeTest {
         geo_location geo = n.getLocation();
         assertEquals(geo,g);
         double weight = n.getWeight();
-        assertEquals(weight,2.4);
+        assertEquals(weight,Double.MAX_VALUE);
         String info = n.getInfo();
         assertEquals(info,"White");
         int tag = n.getTag();

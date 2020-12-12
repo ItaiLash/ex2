@@ -14,6 +14,10 @@ public class graphJsonDeserializer implements JsonDeserializer<directed_weighted
         for (int i = 0; i < nodesJsonArray.size(); i++) {
             JsonObject jsonObjectNode = nodesJsonArray.get(i).getAsJsonObject();
             int key = jsonObjectNode.get("id").getAsInt();
+            double weight = 0;
+            if(jsonObjectNode.keySet().contains("weight")){
+                weight = jsonObjectNode.get("weight").getAsDouble();
+            }
             JsonElement location = jsonObjectNode.get("pos");
             String s = location.getAsString();
             String arr[] = s.split(",");
@@ -21,7 +25,7 @@ public class graphJsonDeserializer implements JsonDeserializer<directed_weighted
             double y = Double.parseDouble(arr[1]);
             double z = Double.parseDouble(arr[2]);
             geo_location pos = new geoLocation(x, y, z);
-            node_data n = new node(key, pos, 0, "White", -1);
+            node_data n = new node(key, pos, weight, "White", -1);
             graph.addNode(n);
         }
 

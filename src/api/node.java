@@ -48,7 +48,7 @@ public class node implements node_data,Comparable<node_data> {
 
     /**
      * Constructor by variables.
-     * NOTE: וsing this constructor will not give this node a unique key.
+     * NOTE:using this constructor will not give this node a unique key.
      * Used for reading a node from a JSON file.
      * @param key
      * @param location

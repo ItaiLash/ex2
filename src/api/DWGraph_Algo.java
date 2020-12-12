@@ -185,6 +185,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             node = new JSONObject();
             node.put("pos", n.getLocation());
             node.put("id", n.getKey());
+            node.put("weight", n.getWeight());
             nodes.put(node);
             for (edge_data e : this.graph.getE(n.getKey())) {
                 edge = new JSONObject();
@@ -361,7 +362,19 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         }
     }
 
-    /*
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DWGraph_Algo that = (DWGraph_Algo) o;
+        return this.graph.equals(that.graph);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(graph);
+    }
+/*
         private void flipGraph(){
             Collection<node_data> nodes = this.graph.getV();
             for(node_data n : nodes){

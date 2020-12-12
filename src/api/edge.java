@@ -31,7 +31,11 @@ public class edge implements edge_data {
      * @param d - destination  node id.
      * @param w - weight.
      */
+
     public edge(int s, int d, double w){
+        if(w<0){
+            throw new RuntimeException("Edge weight must be with positive value");
+        }
         this.src = s;
         this.dest = d;
         this.w = w;
