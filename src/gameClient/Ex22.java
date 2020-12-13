@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class Ex22 implements Runnable {
-    private static MyFrame _win;
+    private static MyFrame2 _win;
     private static Arena _ar;
 
     public static void main(String[] args) {
@@ -24,13 +24,16 @@ public class Ex22 implements Runnable {
 
     @Override
     public void run() {
-        int game_scenario = 18;
+        int game_scenario = 10;
         game_service game = Game_Server_Ex2.getServer(game_scenario);
         directed_weighted_graph gg = init(game);
         game.startGame();
+        gameClient.panelTimer p=new panelTimer(game);
+        _win.myPanel.add(p);
+        _win.setVisible(true);
         _win.setTitle("Itai&Liav Pokemons Game");
         int ind = 0;
-        long dt = 100;
+        long dt = 0;
         while (game.isRunning()) {
             moveAgents(game, gg);
             try {
@@ -210,9 +213,9 @@ public class Ex22 implements Runnable {
         _ar = new Arena();
         _ar.setGraph(gg);
         _ar.setPokemons(Arena.json2Pokemons(fs));
-        _win = new MyFrame("Ex2");
+        _win = new MyFrame2("Ex2",_ar);
         _win.setSize(1000, 700);
-        _win.update(_ar);
+       // _win.update(_ar);
         _win.show();
         String info = game.toString();
         JSONObject line;
