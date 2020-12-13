@@ -7,7 +7,7 @@ import api.node_data;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
-
+import api.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
@@ -24,6 +24,8 @@ public class MyFrame extends JFrame{
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
+	private game_service game;
+
 	MyFrame(String a) {
 		super(a);
 		int _ind = 0;
@@ -44,12 +46,11 @@ public class MyFrame extends JFrame{
 		int w = this.getWidth();
 		int h = this.getHeight();
 		g.clearRect(0, 0, w, h);
-	//	updateFrame();
+		updateFrame();
 		drawPokemons(g);
 		drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
-		
 	}
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
@@ -127,4 +128,5 @@ public class MyFrame extends JFrame{
 		g.drawLine((int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y());
 	//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 	}
-}
+
+	}

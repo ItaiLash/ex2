@@ -20,9 +20,9 @@ public class CL_Agent {
 		private directed_weighted_graph _gg;
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
-		
 		private double _value;
-		
+		//our fileds
+		private CL_Pokemon choosen = null;
 		
 		public CL_Agent(directed_weighted_graph g, int start_node) {
 			_gg = g;
@@ -165,5 +165,12 @@ public class CL_Agent {
 		}
 		public void set_sg_dt(long _sg_dt) {
 			this._sg_dt = _sg_dt;
+		}
+
+		public void setChoosen(CL_Pokemon c){
+			choosen = c;
+		}
+		public CL_Pokemon getChoosen(){
+			return choosen;
 		}
 	}

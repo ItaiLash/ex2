@@ -73,8 +73,7 @@ public interface game_service extends Serializable{
 	 */
 	public long timeToEnd();
 	/**
-	 * moves all the agents along each edge,
-	 * if the agent is on the node
+	 * moves all the agents along each edge, if the agent is on the node
 	 * (nothing is done - requires to chooseNextEdge(int id, int next_node)
 	 * @return a JSON like String - representing status of all the agents.
 	 */
