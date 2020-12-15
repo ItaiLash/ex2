@@ -11,7 +11,7 @@ public class CL_Pokemon {
 	private double min_dist;
 	private int min_ro;
 	//our filed
-	private boolean isEaten = false;
+
 	
 	public CL_Pokemon(Point3D p, int t, double v, double s, edge_data e) {
 		_type = t;
@@ -34,7 +34,7 @@ public class CL_Pokemon {
 		}
 		return ans;
 	}
-	public String toString() {return "F:{v="+_value+", t="+_type+"}"+isEaten;}
+	public String toString() {return "F:{v="+_value+", t="+_type+"}";}
 	public edge_data get_edge() {
 		return _edge;
 	}
@@ -66,11 +66,5 @@ public class CL_Pokemon {
 		this.min_ro = min_ro;
 	}
 
-	public void setIsEaten(){
-		isEaten = true;
-	}
 
-	public boolean getIsEaten(){
-		return isEaten;
-	}
 }

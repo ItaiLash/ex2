@@ -51,11 +51,25 @@ public class Arena {
 		Iterator<node_data> iter = _gg.getV().iterator();
 		while(iter.hasNext()) {
 			geo_location c = iter.next().getLocation();
-			if(MIN==null) {x0 = c.x(); y0=c.y(); x1=x0;y1=y0;MIN = new Point3D(x0,y0);}
-			if(c.x() < x0) {x0=c.x();}
-			if(c.y() < y0) {y0=c.y();}
-			if(c.x() > x1) {x1=c.x();}
-			if(c.y() > y1) {y1=c.y();}
+			if(MIN==null) {
+				x0 = c.x();
+				y0=c.y();
+				x1=x0;
+				y1=y0;
+				MIN = new Point3D(x0,y0);
+			}
+			if(c.x() < x0) {
+				x0=c.x();
+			}
+			if(c.y() < y0) {
+				y0=c.y();
+			}
+			if(c.x() > x1) {
+				x1=c.x();
+			}
+			if(c.y() > y1) {
+				y1=c.y();
+			}
 		}
 		double dx = x1-x0, dy = y1-y0;
 		MIN = new Point3D(x0-dx/10,y0-dy/10);
@@ -93,6 +107,8 @@ public class Arena {
 		}
 		return ans;
 	}
+
+
 	public static ArrayList<CL_Pokemon> json2Pokemons(String fs) {
 		ArrayList<CL_Pokemon> ans = new  ArrayList<CL_Pokemon>();
 		try {
@@ -173,6 +189,15 @@ public class Arena {
 		Range2D world = GraphRange(g);
 		Range2Range ans = new Range2Range(world, frame);
 		return ans;
+	}
+
+	public CL_Pokemon getPokByPoint(Point3D p){
+		for(CL_Pokemon pok : _pokemons){
+			if(pok.getLocation().equals(p)){
+				return pok;
+			}
+		}
+		return null;
 	}
 
 }
