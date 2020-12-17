@@ -102,6 +102,9 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         if (this.graph.getV().contains(src) || this.graph.getV().contains(dest)) {
             throw new RuntimeException("One or more of your keys does not exist in the graph!");
         }
+        if(src == dest){
+            return 0;
+        }
         resetInfo();
         resetTag();
         resetWeight();

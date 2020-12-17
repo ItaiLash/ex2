@@ -1,11 +1,9 @@
 package gameClient;
-
 import Server.Game_Server_Ex2;
 import api.*;
 import gameClient.util.Point3D;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -61,7 +59,7 @@ public class Ex2 implements Runnable {
     public void run() {
         game_service game = Game_Server_Ex2.getServer(scenario);
         directed_weighted_graph gg = init(game);
-        //game.login(id);
+        game.login(id);
         game.startGame();
         gameClient.panelTimer p = new panelTimer(game);
         _win.myPanel.add(p);
@@ -75,7 +73,7 @@ public class Ex2 implements Runnable {
                 if (ind % 1 == 0) {
                     _win.repaint();
                 }
-                Thread.sleep(dt);
+                //Thread.sleep(dt);
                 ind++;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -125,7 +123,7 @@ public class Ex2 implements Runnable {
                 Arena.updateEdge(poks.get(i), gg);
             }
             agp = new HashMap<>();
-            if (numOfAgents == 1 && numOfPoks > 2) {
+            if (numOfAgs == 1 && numOfPoks > 2) {
                 CL_Pokemon pok = choosePokemon1(poks, gra);
                 edge_data e = pok.get_edge();
                 int dest;
@@ -136,11 +134,9 @@ public class Ex2 implements Runnable {
                 }
                 game.addAgent(dest);
                 //agp.put(0, pok.getLocation());
-            } else {
+            } else if (numOfAgs == 1 && numOfPoks == 2) {
                 PriorityQueue<CL_Pokemon> pq = mostValuePok(poks);
                 for (int i = 0; i < numOfAgents && !pq.isEmpty(); i++) {
-                    // int n = i % poks.size();
-                    // CL_Pokemon pok = poks.get(n);
                     CL_Pokemon pok = pq.poll();
                     edge_data e = pok.get_edge();
                     int dest;
@@ -150,10 +146,24 @@ public class Ex2 implements Runnable {
                         dest = e.getDest();
                     }
                     game.addAgent(dest);
-                    System.out.println(pok + " edge: " + e);
                     agp.put(i, pok.getLocation());
-                    System.out.println("put: " + pok);
                 }
+            } else {
+                for (int i = 0; i < numOfAgents; i++) {
+                    CL_Pokemon pok = choosePokemon1(poks, gra);
+                    edge_data e = pok.get_edge();
+                    double rat = getRatio(e, gg, pok.getLocation());
+                    int dest;
+                    if (e.getDest() > e.getSrc() && pok.getType() == 1 || e.getDest() < e.getSrc() && pok.getType() == -1) {
+                        dest = e.getSrc();
+                    } else {
+                        dest = e.getDest();
+                    }
+                    game.addAgent(dest);
+                    System.out.println(pok + " : edge - " + e + ", ratio: " + rat);
+                    poks.remove(pok);
+                }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -161,10 +171,9 @@ public class Ex2 implements Runnable {
         return gg;
     }
 
-
     private void moveAgents(game_service game, directed_weighted_graph gg) {
         String lg = game.move();
-        System.out.println(lg);
+        //System.out.println(lg);
         List<CL_Agent> log = Arena.getAgents(lg, gg);
         _ar.setAgents(log);
         String fs = game.getPokemons();
@@ -215,7 +224,12 @@ public class Ex2 implements Runnable {
         } else {
             CL_Pokemon current = _ar.getPokByPoint(agp.get(agent.getID()));
             List<node_data> lst = continueToPok(ga, src, agent, current);
-            ans = lst.remove(0).getKey();
+            if (lst.isEmpty()) {
+                int dest = ga.getGraph().getE(agent.getSrcNode()).iterator().next().getDest();
+                ans = dest;
+            } else {
+                ans = lst.remove(0).getKey();
+            }
         }
         return ans;
     }
@@ -262,7 +276,6 @@ public class Ex2 implements Runnable {
     }
 
     private static synchronized List<node_data> nextPokemonByDis(dw_graph_algorithms g, int src, CL_Agent agent) {
-        System.out.println("im here agent num " + agent.getID());
         List<CL_Pokemon> poks = _ar.getPokemons();
         for (CL_Pokemon pok : poks) {
             Arena.updateEdge(pok, g.getGraph());
@@ -281,7 +294,6 @@ public class Ex2 implements Runnable {
                     }
                 }
             }
-
             if (!flag) {
                 updatedPoks.add(pok);
             }
@@ -298,7 +310,6 @@ public class Ex2 implements Runnable {
         List<node_data> lst2 = null;
         while (itr.hasNext()) {
             CL_Pokemon current = itr.next();
-            System.out.println("try" + current);
             edge_data e = current.get_edge();
             int type = current.getType();
             double d;
@@ -319,7 +330,6 @@ public class Ex2 implements Runnable {
             }
         }
         agp.replace(agent.getID(), closer.getLocation());
-        System.out.println("agent: " + agent.getID() + " pick " + closer);
         return lst2;
     }
 
@@ -335,6 +345,15 @@ public class Ex2 implements Runnable {
                     node_data dest = maybeBetter.get(i + 1);
                     d += g.getGraph().getEdge(sorc.getKey(), dest.getKey()).getWeight();
                 }
+            }
+        }
+        if (numOfAgs == numOfPoks) {
+            List<CL_Pokemon> p = new LinkedList<>();
+            p.add(current);
+            List<CL_Pokemon> goodList = goodList(p, g, agent);
+            if (goodList.isEmpty()) {
+                agp.replace(agent.getID(), null);
+                return maybeBetter;
             }
         }
         Arena.updateEdge(current, g.getGraph());
@@ -357,16 +376,15 @@ public class Ex2 implements Runnable {
         } else {
             agp.replace(agent.getID(), current.getLocation());
         }
-        System.out.println("agent: " + agent.getID() + " pick " + current);
         return lst;
     }
 
 
     public PriorityQueue<CL_Pokemon> mostValuePok(ArrayList<CL_Pokemon> poks) {
         PriorityQueue<CL_Pokemon> pq = new PriorityQueue<>(poks.size(), (o1, o2) -> {
-            if (o1.getValue() < o2.getType()) {
+            if (o1.getValue() < o2.getValue()) {
                 return 1;
-            } else if (o1.getValue() > o2.getType()) {
+            } else if (o1.getValue() > o2.getValue()) {
                 return -1;
             } else {
                 return 0;
@@ -381,15 +399,38 @@ public class Ex2 implements Runnable {
         Iterator<CL_Pokemon> goodItr = lst.listIterator();
         Iterator<CL_Agent> agItr = _ar.getAgents().listIterator();
         List<CL_Pokemon> goodPoks = new LinkedList<>();
-        boolean flag = true;
+        boolean flag;
         while (goodItr.hasNext()) {
             flag = true;
             CL_Pokemon goodPok = goodItr.next();
-            double d2 = g.shortestPathDist(current.getSrcNode(), goodPok.get_edge().getSrc());
+            int type = goodPok.getType();
+            edge_data e = goodPok.get_edge();
+            double d2;
+            if (e.getDest() > e.getSrc() && type == 1 || e.getDest() < e.getSrc() && type == -1) {
+                d2 = g.shortestPathDist(current.getSrcNode(), goodPok.get_edge().getSrc()) + e.getWeight();
+            } else {
+                d2 = g.shortestPathDist(current.getSrcNode(), goodPok.get_edge().getDest()) + e.getWeight();
+            }
             while (agItr.hasNext()) {
                 CL_Agent agent = agItr.next();
                 if (agent != current) {
-                    double d1 = g.shortestPathDist(agent.getSrcNode(), goodPok.get_edge().getSrc());
+                    double d1;
+                    if (agp.get(agent.getID()) != null) {
+                        CL_Pokemon pok = _ar.getPokByPoint(agp.get(agent.getID()));
+                        int type2 = pok.getType();
+                        edge_data e2 = pok.get_edge();
+                        if (e2.getDest() > e2.getSrc() && type2 == 1 || e2.getDest() < e2.getSrc() && type2 == -1) {
+                            d1 = g.shortestPathDist(pok.get_edge().getDest(), goodPok.get_edge().getSrc()) + e.getWeight();
+                        } else {
+                            d1 = g.shortestPathDist(pok.get_edge().getDest(), goodPok.get_edge().getDest()) + e.getWeight();
+                        }
+                    } else {
+                        if (e.getDest() > e.getSrc() && type == 1 || e.getDest() < e.getSrc() && type == -1) {
+                            d1 = g.shortestPathDist(agent.getSrcNode(), goodPok.get_edge().getSrc()) + e.getWeight();
+                        } else {
+                            d1 = g.shortestPathDist(agent.getSrcNode(), goodPok.get_edge().getDest()) + e.getWeight();
+                        }
+                    }
                     if (d1 < d2) {
                         flag = false;
                         break;
@@ -401,7 +442,6 @@ public class Ex2 implements Runnable {
             }
             agItr = _ar.getAgents().listIterator();
         }
-
         return goodPoks;
     }
 
@@ -409,52 +449,51 @@ public class Ex2 implements Runnable {
         Iterator<CL_Pokemon> poks = pokList.listIterator();
         Iterator<CL_Pokemon> poks2 = pokList.listIterator();
         CL_Pokemon chosen = null;
-        double d = Double.MAX_VALUE;
-        double d1 = 0;
+        double d = 0;
+        double d1 = 1;
         while (poks.hasNext()) {
             CL_Pokemon pok = poks.next();
             edge_data e = pok.get_edge();
+            int key1;
+            if (e.getDest() > e.getSrc() && pok.getType() == 1 || e.getDest() < e.getSrc() && pok.getType() == -1) {
+                key1 = e.getSrc();
+            } else {
+                key1 = e.getDest();
+            }
             while (poks2.hasNext()) {
                 CL_Pokemon pok2 = poks2.next();
-                edge_data e2 = pok2.get_edge();
-                if (pok.getLocation() != pok2.getLocation()) {
-                    d1 += g.shortestPathDist(e.getSrc(), e2.getSrc());
+                if (pok != pok2) {
+                    edge_data e2 = pok2.get_edge();
+                    int key2;
+                    if (e2 == e) {
+                        key2 = key1;
+                    } else if (e2.getDest() > e2.getSrc() && pok2.getType() == 1 || e2.getDest() < e2.getSrc() && pok2.getType() == -1) {
+                        key2 = e.getSrc();
+                    } else {
+                        key2 = e.getDest();
+                    }
+                    d1 += g.shortestPathDist(key1, key2);
                 }
             }
-            if (d1 < d) {
+            if (pok.getValue() / d1 > d) {//&& getRatio(e,g.getGraph(),pok.getLocation()) > 0.15) {
                 chosen = pok;
-                d = d1;
+                d = pok.getValue() / d1;
             }
-            d1 = 0;
+            d1 = 1;
+            poks2 = pokList.listIterator();
         }
         return chosen;
     }
 
-    private CL_Pokemon choosePokemon2(List<CL_Pokemon> pokList, dw_graph_algorithms g) {
-        Iterator<CL_Pokemon> poks = pokList.listIterator();
-        Iterator<CL_Pokemon> poks2 = pokList.listIterator();
-        CL_Pokemon chosen = null;
-        int counter = 0;
-        int counter2 = 0;
-        while (poks.hasNext()) {
-            CL_Pokemon pok = poks.next();
-            edge_data e = pok.get_edge();
-            while (poks2.hasNext()) {
-                CL_Pokemon pok2 = poks.next();
-                edge_data e2 = pok2.get_edge();
-                if (pok.getLocation() != pok2.getLocation()) {
-                    if (g.getGraph().getE(e.getDest()).contains(e2) || g.getGraph().getE(e.getSrc()).contains(e2)) {
-                        counter2++;
-                    }
-                }
-            }
-            if (counter2 > counter) {
-                chosen = pok;
-                counter = counter2;
-            }
-            counter2 = 0;
+
+    public double getRatio(edge_data e, directed_weighted_graph g, Point3D point) {
+        if (e != null) {
+            int src = e.getSrc();
+            int dest = e.getDest();
+            double ratio = g.getNode(src).getLocation().distance(point) / g.getNode(src).getLocation().distance(g.getNode(dest).getLocation());
+            return ratio;
         }
-        return chosen;
+        return -1;
     }
 }
 

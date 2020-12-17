@@ -120,8 +120,11 @@ public class MyPanel extends JPanel {
         g.setFont(new Font("ARIEL", Font.BOLD, 20));
         int score = 0;
         if(agents != null) {
+            int i = 0;
             for (CL_Agent agent : agents) {
                 score += agent.getValue();
+                g.drawString("Agent " + agent.getID() +" : " + agent.getValue() + " (" + agent.getSpeed() +") ",15 , 80+i*30);
+                i++;
             }
         }
         g.drawString("Score: " + score,15 , 50);
