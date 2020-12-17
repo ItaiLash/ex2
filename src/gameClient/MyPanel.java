@@ -41,7 +41,8 @@ public class MyPanel extends JPanel {
         updateFrame();
         drawGraph(g);
         drawPokemons(g);
-        drawAgants(g);
+        drawAgents(g);
+        drawValue(g);
     }
 
 
@@ -76,14 +77,15 @@ public class MyPanel extends JPanel {
                 if (c != null) {
                     geo_location fp = this._w2f.world2frame(c);
                     g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+                    g.setColor(Color.black);
+                    g.drawString(""+(int)pok.getValue(),(int) fp.x()-(r/2),(int) fp.y()-(r/2));
                 }
             }
         }
     }
 
-    private void drawAgants(Graphics g) {
+    private void drawAgents(Graphics g) {
         List<CL_Agent> rs = _ar.getAgents();
-        //	Iterator<OOP_Point3D> itr = rs.iterator();
         g.setColor(Color.red);
         int i = 0;
         while (rs != null && i < rs.size()) {
@@ -111,6 +113,18 @@ public class MyPanel extends JPanel {
         geo_location s0 = this._w2f.world2frame(s);
         geo_location d0 = this._w2f.world2frame(d);
         g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
+    }
+    private void drawValue (Graphics g){
+        List<CL_Agent> agents = _ar.getAgents();
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("ARIEL", Font.BOLD, 20));
+        int score = 0;
+        if(agents != null) {
+            for (CL_Agent agent : agents) {
+                score += agent.getValue();
+            }
+        }
+        g.drawString("Score: " + score,15 , 50);
     }
 }
 
