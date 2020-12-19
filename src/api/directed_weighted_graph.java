@@ -42,7 +42,7 @@ public interface directed_weighted_graph {
 	 * This method returns a pointer (shallow copy) for the
 	 * collection representing all the nodes in the graph. 
 	 * Note: this method should run in O(1) time.
-	 * @return Collection<node_data>
+	 * @return Collection of node_data
 	 */
 	public Collection<node_data> getV();
 	/**
@@ -50,7 +50,7 @@ public interface directed_weighted_graph {
 	 * collection representing all the edges getting out of 
 	 * the given node (all the edges starting (source) at the given node). 
 	 * Note: this method should run in O(k) time, k being the collection size.
-	 * @return Collection<edge_data>
+	 * @return Collection of edge_data
 	 */
 	public Collection<edge_data> getE(int node_id);
 	/**

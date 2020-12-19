@@ -75,7 +75,7 @@ public class Ex2Try implements Runnable {
                 if (ind % 1 == 0) {
                     _win.repaint();
                 }
-                //Thread.sleep(dt);
+                Thread.sleep(dt);
                 ind++;
             } catch (Exception e) {
                 e.printStackTrace();

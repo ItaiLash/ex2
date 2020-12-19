@@ -7,7 +7,7 @@ import java.util.*;
  * DWGraph_DS class implement an directional weighted graph.
  * It support a large number of nodes (over 100,000).
  * This implementation based on HashMap data structure.
- * @author itai.lashover&liav.weiss
+ * @author itai.lashover and liav.weiss
  */
 public class DWGraph_DS implements directed_weighted_graph {
 
@@ -170,7 +170,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     /**
      * Returns a pointer (shallow copy) for the collection representing all the nodes in the graph.
      * Complexity: this method run in O(1).
-     * @return Collection<node_data>
+     * @return Collection of node_data
      */
     @Override
     public Collection<node_data> getV() {
@@ -181,7 +181,7 @@ public class DWGraph_DS implements directed_weighted_graph {
      * Returns a pointer (shallow copy) for the collection representing all the edges getting out of
      * the given node (all the edges starting (source) at the given node).
      * Complexity: this method run in O(1) time.
-     * @return Collection<edge_data>
+     * @return Collection of edge_data
      */
     @Override
     public Collection<edge_data> getE(int node_id) {

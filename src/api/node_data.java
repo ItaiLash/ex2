@@ -9,13 +9,13 @@ package api;
 public interface node_data {
 	/**
 	 * Returns the key (id) associated with this node.
-	 * @return
+	 * @return this node id
 	 */
 	public int getKey();
 	/** Returns the location of this node, if
 	 * none return null.
 	 * 
-	 * @return
+	 * @return point3D
 	 */
 	public geo_location getLocation();
 	/** Allows changing this node's location.
@@ -24,7 +24,7 @@ public interface node_data {
 	public void setLocation(geo_location p);
 	/**
 	 * Returns the weight associated with this node.
-	 * @return
+	 * @return weight
 	 */
 	public double getWeight();
 	/**
@@ -34,7 +34,7 @@ public interface node_data {
 	public void setWeight(double w);
 	/**
 	 * Returns the remark (meta data) associated with this node.
-	 * @return
+	 * @return info
 	 */
 	public String getInfo();
 	/**
@@ -45,7 +45,7 @@ public interface node_data {
 	/**
 	 * Temporal data (aka color: e,g, white, gray, black) 
 	 * which can be used be algorithms 
-	 * @return
+	 * @return tag
 	 */
 	public int getTag();
 	/** 

@@ -4,8 +4,8 @@ import java.util.Objects;
 
 /**
  * This class ia an implementation of geo_location interface.
- * geoLocation represents a geo location <x,y,z>, aka Point3D.
- * @author itai.lashover&liav.weiss
+ * geoLocation represents a geo location (x,y,z), aka Point3D.
+ * @author itai.lashover and liav.weiss
  */
 public class geoLocation implements geo_location {
 

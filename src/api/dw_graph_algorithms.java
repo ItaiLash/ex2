@@ -8,7 +8,7 @@ import java.util.List;
  * 1. init(graph);
  * 2. isConnected(); // strongly (all ordered pais connected)
  * 3. double shortestPathDist(int src, int dest);
- * 4. List<node_data> shortestPath(int src, int dest);
+ * 4. List of node_data shortestPath(int src, int dest);
  * 5. Save(file); // JSON file
  * 6. Load(file); // JSON file
  *

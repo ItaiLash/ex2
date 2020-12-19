@@ -6,7 +6,7 @@ import java.util.Objects;
  * This class is an implementation of edge_data interface.
  * edge class implement a set of operations applicable on a
  * directional edge(src,dest) in a (directional) weighted graph.
- * @author itai.lashover&liav.weiss
+ * @author itai.lashover liav.weiss
  *
  */
 public class edge implements edge_data {

@@ -6,7 +6,7 @@ import java.util.Objects;
  * This class is an implementation of node_data interface.
  * node class implement set of operations applicable on a
  * node (vertex) in a (directional) weighted graph.
- * @author itai.lashover&liav.weiss
+ * @author itai.lashover and liav.weiss
  *
  */
 public class node implements node_data,Comparable<node_data> {
@@ -50,11 +50,11 @@ public class node implements node_data,Comparable<node_data> {
      * Constructor by variables.
      * NOTE:using this constructor will not give this node a unique key.
      * Used for reading a node from a JSON file.
-     * @param key
-     * @param location
-     * @param weight
-     * @param info
-     * @param tag
+     * @param key - id
+     * @param location - point3d
+     * @param weight - weight
+     * @param info - metadata
+     * @param tag - tag
      */
     public node(int key, geo_location location, double weight, String info, int tag) {
         this.key = key;
@@ -67,7 +67,7 @@ public class node implements node_data,Comparable<node_data> {
 
     /**
      * Returns the key (id) associated with this node.
-     * @return
+     * @return key
      */
     @Override
     public int getKey() {
