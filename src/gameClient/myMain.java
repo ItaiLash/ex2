@@ -7,7 +7,7 @@ public class myMain {
         while(login.isOn != true) {
             System.out.print("");
         }
-        Ex2 start=new Ex2(login.id,login.scenario);
+        Ex2Old start=new Ex2Old(login.id,login.scenario);
         Thread client = new Thread(start);
         client.start();
     }
