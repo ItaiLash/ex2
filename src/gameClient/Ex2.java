@@ -144,7 +144,31 @@ public class Ex2 implements Runnable {
                     game.addAgent(dest);
                     agp.put(i, pok.getLocation());
                 }
-            } else {
+            }
+            else if(numOfAgs>numOfPoks){
+                PriorityQueue<CL_Pokemon> pq = mostValuePok(poks);
+                int i = 0;
+                while(!pq.isEmpty()){
+                    CL_Pokemon pok = pq.poll();
+                    edge_data e = pok.get_edge();
+                    int dest;
+                    if ((e.getDest() > e.getSrc() && pok.getType() == 1 || e.getDest() < e.getSrc() && pok.getType() == -1) && getRatio(e, gg, pok.getLocation()) > 0.15) {
+                        dest = e.getSrc();
+                    } else {
+                        dest = e.getDest();
+                    }
+                    game.addAgent(dest);
+                    agp.put(i, pok.getLocation());
+                    i++;
+                }
+                if(pq.isEmpty()){
+                    for(int j = i ; j< numOfAgents ; j++){
+                        game.addAgent(gg.getV().iterator().next().getKey());
+
+                    }
+                }
+            }
+            else {
                 for (int i = 0; i < numOfAgents; i++) {
                     CL_Pokemon pok = choosePokemon(poks, gra);
                     edge_data e = pok.get_edge();

@@ -11,6 +11,10 @@ import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * This class represent an opening menu for the game.
+ * The menu allows to enter ID number and select the stage at which you want to play.
+ */
 public class loginMenu implements ActionListener {
 
     private static JLabel idLabel;
@@ -53,6 +57,11 @@ public class loginMenu implements ActionListener {
         frame.setVisible(true);
     }
 
+    /**
+     * This method override actionPerformed of ActionListener.
+     * The method "listen" to the entered text.
+     * @param e - ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         this.id = Integer.parseInt(idField.getText());

@@ -12,11 +12,18 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This class represent a GUI of the Pokemon game.
+ */
 public class MyPanel extends JPanel {
 
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
 
+    /**
+     * Default constructor.
+     * @param ar
+     */
     public MyPanel(Arena ar) {
         super();
         this._ar = ar;
@@ -24,6 +31,9 @@ public class MyPanel extends JPanel {
         updateFrame();
     }
 
+    /**
+     * This method is responsible for refreshing the frame according to the current state of the game.
+     */
     private void updateFrame() {
         Range rx = new Range(20, this.getWidth() - 20);
         Range ry = new Range(this.getHeight() - 10, 150);
@@ -32,6 +42,10 @@ public class MyPanel extends JPanel {
         _w2f = Arena.w2f(g, frame);
     }
 
+    /**
+     * This method is responsible for creating the graphical window that represents the game.
+     * @param g - Graphics
+     */
     protected void paintComponent(Graphics g) {
         int w = this.getWidth();
         int h = this.getHeight();
@@ -46,6 +60,11 @@ public class MyPanel extends JPanel {
     }
 
 
+    /**
+     * This method draw graph on a frame.
+     * To do so it used "drawNode" and "drawEdge".
+     * @param g - Graphics
+     */
     private void drawGraph(Graphics g) {
         directed_weighted_graph gg = _ar.getGraph();
         Iterator<node_data> iter = gg.getV().iterator();
@@ -62,6 +81,14 @@ public class MyPanel extends JPanel {
         }
     }
 
+
+    /**
+     * This method draw an oval on the frame.
+     * The oval represent a Pokemon on a graph.
+     * Green oval means this pokemon is on ascending edge (aka 2-->7).
+     * Orange oval means this pokemon is on descending edge (aka 8-->4).
+     * @param g - Graphics
+     */
     private void drawPokemons(Graphics g) {
         List<CL_Pokemon> poks = _ar.getPokemons();
         if (poks != null) {
@@ -84,6 +111,11 @@ public class MyPanel extends JPanel {
         }
     }
 
+    /**
+     * This method draw an oval on the frame.
+     * The oval represent an agent on a graph.
+     * @param g - Graphics
+     */
     private void drawAgents(Graphics g) {
         List<CL_Agent> rs = _ar.getAgents();
         g.setColor(Color.red);
@@ -99,6 +131,11 @@ public class MyPanel extends JPanel {
         }
     }
 
+    /**
+     * This method draw an oval on the frame.
+     * The oval represent a node of the graph.
+     * @param g - Graphics
+     */
     private void drawNode(node_data n, int r, Graphics g) {
         geo_location pos = n.getLocation();
         geo_location fp = this._w2f.world2frame(pos);
@@ -106,6 +143,11 @@ public class MyPanel extends JPanel {
         g.drawString("" + n.getKey(), (int) fp.x(), (int) fp.y() - 4 * r);
     }
 
+    /**
+     * This method draw a line on the frame.
+     * The line represent a directed weighted edge of the graph.
+     * @param g - Graphics
+     */
     private void drawEdge(edge_data e, Graphics g) {
         directed_weighted_graph gg = _ar.getGraph();
         geo_location s = gg.getNode(e.getSrc()).getLocation();
@@ -114,6 +156,12 @@ public class MyPanel extends JPanel {
         geo_location d0 = this._w2f.world2frame(d);
         g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
     }
+
+    /**
+     * This method draw a String on the frame.
+     * The String represent the current score in the game.
+     * @param g - Graphics
+     */
     private void drawValue (Graphics g){
         List<CL_Agent> agents = _ar.getAgents();
         g.setColor(Color.BLACK);
