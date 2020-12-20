@@ -365,6 +365,14 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         }
     }
 
+    /**
+     * Returns true if the arguments are equal to each other and false otherwise.
+     * Consequently, if both arguments are null, true is returned
+     * and if exactly one argument is null, false is returned.
+     * Otherwise, equality is determined by comparing all the fields of the object.
+     * @param o - an object
+     * @return true if the arguments are equal to each other and false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -373,42 +381,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return this.graph.equals(that.graph);
     }
 
+    /**
+     * Override hashcode because equals changed.
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         return Objects.hash(graph);
     }
-/*
-        private void flipGraph(){
-            Collection<node_data> nodes = this.graph.getV();
-            for(node_data n : nodes){
-                Collection<edge_data> edges = this.graph.getE(n.getKey());
-                for(edge_data e : edges){
-                    int src = e.getSrc();
-                    int dest = e.getDest();
-                    double w = e.getWeight();
-                    this.graph.removeEdge(src,dest);
-                    this.graph.connect(dest,src,w);
-                }
-            }
-        }
-        public boolean isConnected() {
-            if (this.graph.nodeSize() == 0) {
-                return true;
-            }
-            node_data n = this.graph.getV().iterator().next();
-            boolean b = this.bfs(n);
-            resetTag();
-            if(!b){
-                return false;
-            }
-            flipGraph();
-            b = this.bfs(n);
-            flipGraph();
-            resetTag();
-            if(!b){
-                return false;
-            }
-            return true;
-        }
-    */
+
 }

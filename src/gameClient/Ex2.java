@@ -21,7 +21,7 @@ public class Ex2 implements Runnable {
     private static int numOfPoks;
     private static int numOfAgs;
 
-
+/*
     public static void main(String[] args) {
         loginMenu login = new loginMenu();
         login.chose();
@@ -33,11 +33,11 @@ public class Ex2 implements Runnable {
         client.start();
     }
 
-    /*
+ */
     public static void main(String[] args) {
-        Ex22 start;
+        Ex2 start;
         if(args.length == 2) {
-            start = new Ex22(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+            start = new Ex2(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         }
         else{
             loginMenu login = new loginMenu();
@@ -45,12 +45,12 @@ public class Ex2 implements Runnable {
             while(login.isOn) {
                 System.out.print("");
             }
-            start = new Ex22(login.id, login.scenario);
+            start = new Ex2(login.id, login.scenario);
         }
         Thread client = new Thread(start);
         client.start();
     }
-*/
+
     public Ex2(long id, int scenario) {
         this.id = id;
         this.scenario = scenario;

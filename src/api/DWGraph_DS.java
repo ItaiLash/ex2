@@ -95,7 +95,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     }
 
     /**
-     * Returns the node_data by the node_id,
+     * Returns the node_data by the node id,
      * @param key - the node_id
      * @return the node_data by the node_id, null if none.
      */
@@ -248,7 +248,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     }
 
     /**
-     * Returns the number of edges (assume directional graph).
+     * Returns the number of edges.
      * Complexity: this method run in O(1) time.
      * @return number of edges in this graph.
      */

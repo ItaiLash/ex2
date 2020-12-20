@@ -50,7 +50,7 @@ public class geoLocation implements geo_location {
     }
 
     /**
-     * Returns the distance between two nodes.
+     * Returns the distance between two geoLocations points.
      * @param g - geo_location
      * @return the distance between this and g.
      */
