@@ -260,7 +260,7 @@ true
 ```
 
 # Second part (gameClient package)
-This part is a very fun way to illustrate the algorithems that implemented in the first part of rhe project via a game.
+This part is a very fun way to illustrate the algorithems that implemented in the first part of the project via a game.
 The game is very simple and consists of 24 different stages (0-23).
 At each stage a different graph is loaded with "Pokemon" (orange and green dots) and "Agents" (red dots) on it.
 The graphical interface allows the Pokemon and agents to be displayed on the graph.
