@@ -268,18 +268,18 @@ The graphical interface allows the Pokemon and agents to be displayed on the gra
 The purpose of the game is to use the algorithms from the first part of the project in order to eat as many Pokemon as possible in the allotted time for each stage.
 
 ## Algorithmic classes
-* __CL_Agent__
+* __CL_Agent__\
 Class represent an agent.
 Each agent consists of several fields:
 Unique id, position on the graph, current speed, current edge, current node and accumulated score.
 The class contains various algorithms including getters and setters for all fields, reading from a JSON file and writing to a JSON file.
-* __CL_Pokemon__
+* __CL_Pokemon__\
 Class represent a Pokemon.
 Each Pokemon contains several fields, including:
 The edge on which the Pokemon is located, its position on the graph, the amount of score that will be collected on eating this Pokemon
 and the type of the Pokemon (positive value -> Pokemon is on an ascending edge (aka 4-->8), negative value -> The Pokemon is on a descending edge (aka 7 --> 2)).
 The class contains various algorithms including getters and setters for all fields and reading a Pokemon from a JSON file.
-* __Arena__
+* __Arena__\
 Class represent a multi Agents Arena which move on a graph and eats Pokemons.
 The Arena contains the graph on which the game will be played on, a list of agents and Pokemons 
 and updated information on the current state of the game (location of agents and Pokemon at any given moment,points accumulated and more)
@@ -288,21 +288,38 @@ Loading the game graph (each level has a different graph).
 Position the Agents and Pokemons provided at a certain level on the graph (each level provided different amount of Agents and Pokemons).
 Upload Pokemon from JSON file.
 Edge update (any agent movement requires edge update).
-* __Ex2 (implements Runnable)__
+* __Ex2 (implements Runnable)__\
 This class is a possible solution to the game.
 The class consists of a graphical interface (MyFrame) and an algorithmic interface (Arena).
 In this class we used a number of methods that aim to eat a maximum of Pokemons in less than 10 moves per second.
-The main methods are:
+The main methods are:\
 `Ex2(long id, int scenario)` : A constructor who receives the player's ID number and the number of levle in which the player will want to play.
 The constructor allows the game to be loaded via the command line.
-The user can choose whether to enter the ID number and level number within the command line or through the graphical window.
+The user can choose whether to enter the ID number and level number within the command line or through the graphical window.\
+`run()` : Loading the selected level from the server and running the game algorithmically and graphically.\
+`init(game_service game)` : Gets the desired level from the server as a JSON file, reads the file and loads it into a graph.
+Positions the Pokemon on the graph as called from the server.
+Positions the agents correctly and cleverly on the graph - each agent will be placed close to a different Pokemon and in different locations on the graph.\
+`openGUI(directed_weighted_graph gg, String gamePokemons)` : Takes care of the updated graphic display of the game.\
+`moveAgents(game_service game, directed_weighted_graph gg)` : Moves the agents on the edges, if the agent has reached to a node the method calls for an auxiliary method that wisely selects the next edge on which the agent will advance.\
+`isAlive(List<CL_Agent> agents, List<CL_Pokemon> pokemons)` : Checks whether a Pokemon that marked by an agent is still alive or has been eaten by another agent.\
+`nextNode(directed_weighted_graph g, int src, CL_Agent agent)` : The method calls auxiliary functions according to the status of the agent (its location, whether he chose a Pokemon he would like to eat, etc.) and finally returns the edge that the agent needs to advance on.\
+`nextPokemonByDis(dw_graph_algorithms g, int src, CL_Agent agent)` : The method selects for the agent the Pokemon that will best pay for him to eat.\
+`continueToPok(dw_graph_algorithms g, int src, CL_Agent agent, CL_Pokemon myPokemon)` : If an agent chooses a Pokemon that he wants to eat, the method will check whether it pays to continue advancing towards the chosen Pokemon or to choose another Pokemon (when Pokemon is eaten a new Pokemon is created in a random place on the graph so it may be better to choose another Pokemon to advance towards).\
+`mostValuePok(ArrayList<CL_Pokemon> poks)` : this method is used in init method.
+The method returns a priority queue of Pokemon sorted by their values.\
+`goodList(List<CL_Pokemon> currentList, dw_graph_algorithms g, CL_Agent currentAgent)` : A private method that gets a list of all the Pokemon on the graph.
+The method filters Pokemon that are closer to other agents and returns a shortlist of Pokemon available for eating for the current agent.\
+`choosePokemon(List<CL_Pokemon> pokList, dw_graph_algorithms g)` : The method returns the most lucrative Pokemon to start the game next to.
+The method checks which Pokemon has the most Pokemons closest to it and so the agent will start the game in the best position for him.\
+`getRatio(edge_data e, directed_weighted_graph g, Point3D point)` : Returns the relative position of a point on an edge.
 
 
 ## GUI Classes
 * __MyPanel (extends JPanel)__
 * __panelTimer (extends JPanel)__
 * __loginMenu (implements ActionListener)__
-* __MyFrame (extends JFrame)__
+* __MyFrame (extends JFrame)__\
 This classes allows graphic display of the game:
 1. Displays an opening screen for selecting a stage and entering a ID number (the results are updated on the server with this ID).
 2. Place the agents and Pokemon on the graph.
@@ -310,9 +327,11 @@ This classes allows graphic display of the game:
 4. Updates the cumulative score.
 5. Allows the screen to refresh in order to see the agents progressing on the sides of the graph
 
-
+> In the wiki label you can find more info about the game/
+>
 
 ## External info:
-- More about graph : https://en.wikipedia.org/wiki/Graph_%28discrete_mathematics%29
+- More about graph : https://en.wikipedia.org/wiki/Directed_graph
 - More about Dijkstra's algorithm : https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 - More about BFS algorithm : https://en.wikipedia.org/wiki/Breadth-first_search
+- More about HashMap : https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
