@@ -11,6 +11,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+
+/**
+ * This class is a possible solution to the game.
+ * The class consists of a graphical interface (MyFrame) and an algorithmic interface (Arena).
+ * In this class we used a number of methods that aim to eat a maximum of Pokemons in less than 10 moves per second.
+ */
 public class Ex2 implements Runnable {
 
     private static MyFrame _win;
@@ -21,19 +27,7 @@ public class Ex2 implements Runnable {
     private static int numOfPoks;
     private static int numOfAgs;
 
-/*
-    public static void main(String[] args) {
-        loginMenu login = new loginMenu();
-        login.chose();
-        while (login.isOn) {
-            System.out.print("");
-        }
-        Ex2 start = new Ex2(login.id, login.scenario);
-        Thread client = new Thread(start);
-        client.start();
-    }
 
- */
     public static void main(String[] args) {
         Ex2 start;
         if(args.length == 2) {
@@ -51,12 +45,22 @@ public class Ex2 implements Runnable {
         client.start();
     }
 
+    /**
+     * A constructor who receives the player's ID number and the number of level in which the player will want to play.
+     * The constructor allows the game to be loaded via the command line.
+     * The user can choose whether to enter the ID number and level number within the command line
+     * or through the graphical window.
+     * @param id - the player ID
+     * @param scenario - the chosen level
+     */
     public Ex2(long id, int scenario) {
         this.id = id;
         this.scenario = scenario;
     }
 
-
+    /**
+     *Loading the selected level from the server and running the game algorithmically and graphically.
+     */
     @Override
     public void run() {
         game_service game = Game_Server_Ex2.getServer(scenario);
@@ -86,6 +90,14 @@ public class Ex2 implements Runnable {
         System.exit(0);
     }
 
+    /**
+     * Gets the desired level from the server as a JSON file, reads the file and loads it into a graph.
+     * Positions the Pokemon on the graph as called from the server.
+     * Positions the agents correctly and cleverly on the graph,
+     * each agent will be placed close to a different Pokemon and in different locations on the graph.
+     * @param game - game_service
+     * @return directed_weighted_graph that the game play on.
+     */
     public directed_weighted_graph init(game_service game) {
         String g = game.getGraph();
         String gamePokemons = game.getPokemons();
@@ -155,6 +167,11 @@ public class Ex2 implements Runnable {
         return gg;
     }
 
+    /**
+     * Takes care of the updated graphic display of the game.
+     * @param gg - directed_weighted_graph
+     * @param gamePokemons - JSON format string represent all the pokemon
+     */
     private static void openGUI(directed_weighted_graph gg, String gamePokemons) {
         _ar = new Arena();
         _ar.setGraph(gg);
@@ -164,6 +181,13 @@ public class Ex2 implements Runnable {
         _win.show();
     }
 
+    /**
+     * Moves the agents on the edges,
+     * if the agent has reached to a node the method calls for an auxiliary method that
+     * wisely selects the next edge on which the agent will advance.
+     * @param game - game_service
+     * @param gg - directed_weighted_graph
+     */
     private void moveAgents(game_service game, directed_weighted_graph gg) {
         String lg = game.move();
         List<CL_Agent> agents = Arena.getAgents(lg, gg);
@@ -193,6 +217,11 @@ public class Ex2 implements Runnable {
         }
     }
 
+    /**
+     * Checks whether a Pokemon that marked by an agent is still alive or has been eaten by another agent.
+     * @param agents - List of agents
+     * @param pokemons - List of Pokemons
+     */
     private static void isAlive(List<CL_Agent> agents, List<CL_Pokemon> pokemons) {
         boolean flag;
         for (CL_Agent ag : agents) {
@@ -211,6 +240,15 @@ public class Ex2 implements Runnable {
         }
     }
 
+    /**
+     * The method calls auxiliary functions according to the status of the agent
+     * (its location, whether he chose a Pokemon he would like to eat, etc.)
+     * and finally returns the edge that the agent needs to advance on.
+     * @param g - directed_weighted_graph
+     * @param src - this Agent node
+     * @param agent - CL_Agent
+     * @return
+     */
     private static int nextNode(directed_weighted_graph g, int src, CL_Agent agent) {
         System.out.println(agp);
 
@@ -218,28 +256,7 @@ public class Ex2 implements Runnable {
         ga.init(g);
 
         int ans;
-        /*
-        if(numOfAgs == 1 && numOfPoks > 2) {
-            List<CL_Pokemon> lst = _ar.getPokemons();
-            for (CL_Pokemon pok : lst) {
-                Arena.updateEdge(pok, g);
-            }
-            CL_Pokemon pok = choosePokemon(lst, ga);
-            edge_data e = pok.get_edge();
-            List<node_data> list;
-            if ((e.getDest() > e.getSrc() && pok.getType() == 1 || e.getDest() < e.getSrc() && pok.getType() == -1) && getRatio(e, ga.getGraph(), pok.getLocation()) > 0.15) {
-                list = ga.shortestPath(src,e.getSrc());
-                list.remove(0);
-                list.add(ga.getGraph().getNode(e.getDest()));
-            } else {
-                list = ga.shortestPath(src,e.getDest());
-                list.remove(0);
-                list.add(ga.getGraph().getNode(e.getSrc()));
-            }
-            return list.remove(0).getKey();
-        }
 
-         */
         if (agp.get(agent.getID()) != null) {
             System.out.println("try: i am on node " + g.getNode(src) + "value: " + agent.getValue());
             List<CL_Pokemon> lst = _ar.getPokemons();
@@ -305,45 +322,14 @@ public class Ex2 implements Runnable {
         return ans;
     }
 
-    private static synchronized List<node_data> nextPokemonByDisAndVal(dw_graph_algorithms g, int src, CL_Agent
-            agent) {
-        List<CL_Pokemon> poks = _ar.getPokemons();
-        for (CL_Pokemon pok : poks) {
-            Arena.updateEdge(pok, g.getGraph());
-        }
-
-        Iterator<CL_Pokemon> itr = poks.listIterator();
-        CL_Pokemon closer = null;
-        double max = 0;
-        double val;
-        List<node_data> lst;
-        List<node_data> lst2 = null;
-        while (itr.hasNext()) {
-            CL_Pokemon current = itr.next();
-            edge_data e = current.get_edge();
-            int type = current.getType();
-            double d;
-            if (e.getDest() > e.getSrc() && type == 1 || e.getDest() < e.getSrc() && type == -1) {
-                d = g.shortestPathDist(src, e.getSrc()) + e.getWeight();
-                lst = g.shortestPath(src, e.getSrc());
-                lst.add(g.getGraph().getNode(e.getDest()));
-            } else {
-                d = g.shortestPathDist(src, e.getDest()) + e.getWeight();
-                lst = g.shortestPath(src, e.getDest());
-                lst.add(g.getGraph().getNode(e.getSrc()));
-            }
-            val = current.getValue();
-            lst.remove(0);
-            if (val / d > max) {
-                max = val / d;
-                closer = current;
-                lst2 = lst;
-            }
-        }
-        agp.replace(agent.getID(), closer.getLocation());
-        return lst2;
-    }
-
+    /**
+     * The method selects for the agent the Pokemon that will best pay for him to eat.
+     * The method calls "goodList" method that returns a shortlist of Pokemon available for eating for the current agent.
+     * @param g - dw_graph_algorithms
+     * @param src - this agent node
+     * @param agent - CL_Agent
+     * @return a List of node represent a path to the chosen Pokemon
+     */
     private static synchronized List<node_data> nextPokemonByDis(dw_graph_algorithms g, int src, CL_Agent agent) {
         List<CL_Pokemon> pokemons = _ar.getPokemons();
         for (CL_Pokemon pok : pokemons) {
@@ -401,6 +387,18 @@ public class Ex2 implements Runnable {
         return finalLst;
     }
 
+    /**
+     * If an agent chooses a Pokemon that he wants to eat,
+     * the method will check whether it pays to continue advancing towards the chosen Pokemon
+     * or to choose another Pokemon .
+     * (when Pokemon is eaten a new Pokemon is created in a random place on the graph
+     * so it may be better to choose another Pokemon to advance towards).
+     * @param g - dw_graph_algorithms
+     * @param src - this Agent nodes' id
+     * @param agent - CL_Agent
+     * @param myPokemon - CL_Pokemon
+     * @return a List of node represent a path to the chosen Pokemon
+     */
     private static List<node_data> continueToPok(dw_graph_algorithms g, int src, CL_Agent agent, CL_Pokemon
             myPokemon) {
         double disToMaybeBetterPok = Double.MAX_VALUE;
@@ -450,7 +448,13 @@ public class Ex2 implements Runnable {
         return lst;
     }
 
-
+    /**
+     * this method is used in init method.
+     * The method returns a priority queue of Pokemon sorted by their values.
+     * @param poks The list of Pokemon from which we want to select a Pokemon.
+     * @return List of Pokemon sorted by priority queue by their value.
+     */
+    public PriorityQueue<CL_Pokemon>
     public PriorityQueue<CL_Pokemon> mostValuePok(ArrayList<CL_Pokemon> poks) {
         PriorityQueue<CL_Pokemon> pq = new PriorityQueue<>(poks.size(), (o1, o2) -> {
             if (o1.getValue() < o2.getValue()) {
@@ -465,6 +469,15 @@ public class Ex2 implements Runnable {
         return pq;
     }
 
+    /**
+     * A private method that gets a list of all the Pokemon on the graph.
+     * The method filters Pokemon that are closer to other agents and returns a shortlist of Pokemon
+     * available for eating for the current agent.
+     * @param currentList the current Pokemon list.
+     * @param g the graph we use.
+     * @param currentAgent the agent who must choose the Pokemon.
+     * @return the final list from which Pokemon was selected.
+     */
     public static List<CL_Pokemon> goodList(List<CL_Pokemon> currentList, dw_graph_algorithms g, CL_Agent
             currentAgent) {
         List<CL_Pokemon> lst = currentList;
@@ -526,6 +539,14 @@ public class Ex2 implements Runnable {
         return finalPoks;
     }
 
+    /**
+     * The method returns the most lucrative Pokemon to start the game next to.
+     * The method checks which Pokemon has the most Pokemons closest to it and so the agent
+     * will start the game in the best position for him.
+     * @param pokList a list of Pokemon from which you can select a Pokemon.
+     * @param g the graph that we use.
+     * @return the best Pokemon to go to.
+     */
     private static CL_Pokemon choosePokemon(List<CL_Pokemon> pokList, dw_graph_algorithms g) {
         Iterator<CL_Pokemon> poks = pokList.listIterator();
         Iterator<CL_Pokemon> poks2 = pokList.listIterator();
@@ -571,6 +592,13 @@ public class Ex2 implements Runnable {
     }
 
 
+    /**
+     * Returns the relative position of a point on an edge.
+     * @param e the edge of the pokemon.
+     * @param g the graph we use.
+     * @param point the point of the pokemon.
+     * @return the ratio of the point on the edge.
+     */
     public static double getRatio(edge_data e, directed_weighted_graph g, Point3D point) {
         if (e != null) {
             int src = e.getSrc();

@@ -11,7 +11,17 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ *This class represent an agent.
+ *The class contains various algorithms including getters and setters for all fields,
+ *reading from a JSON file and writing to a JSON file.
+ * @author itai.Lashover and Liav.Weiss
+ */
 public class CL_Agent {
+    /**
+     *Each agent consists of several fields:
+     *Unique id, position on the graph, current speed, current edge,current node and accumulated score.
+     */
     public static final double EPS = 0.0001;
     private static int _count = 0;
     private static int _seed = 3331;
@@ -27,6 +37,11 @@ public class CL_Agent {
     private double _value;
 
 
+    /**
+     * Default constructor
+     * @param g - directed_weighted_graph
+     * @param start_node - this agent start node
+     */
     public CL_Agent(directed_weighted_graph g, int start_node) {
         _gg = g;
         setMoney(0);
@@ -37,6 +52,10 @@ public class CL_Agent {
 
     }
 
+    /**
+     * Update this agent status(speed, position on the graph, value and more)
+     * @param json - represent the game in each move
+     */
     public void update(String json) {
         JSONObject line;
         try {
@@ -65,11 +84,18 @@ public class CL_Agent {
         }
     }
 
-    //@Override
+    /**
+     * Return this agent source node.
+     * @return nodes' id.
+     */
     public int getSrcNode() {
         return this._curr_node.getKey();
     }
 
+    /**
+     * Return this agent in JSON format.
+     * @return String (as JSON)
+     */
     public String toJSON() {
         int d = this.getNextNode();
         String ans = "{\"Agent\":{"
@@ -84,10 +110,20 @@ public class CL_Agent {
         return ans;
     }
 
+    /**
+     * Set this agent value.
+     * Used just in the constructor - setMoney to be 0
+     * @param v - the new value.
+     */
     private void setMoney(double v) {
         _value = v;
     }
 
+    /**
+     * Set this agent next node.
+     * @param dest - the next nodes' id.
+     * @return true if this agent is on edge, otherwise return false.
+     */
     public boolean setNextNode(int dest) {
         boolean ans = false;
         int src = this._curr_node.getKey();
@@ -100,42 +136,61 @@ public class CL_Agent {
         return ans;
     }
 
+    /**
+     * Set this agent node.
+     * @param src - this nodes' id
+     */
     public void setCurrNode(int src) {
         this._curr_node = _gg.getNode(src);
     }
 
+    /**
+     * Return true if this agent on move(on move = on edge), otherwise false/
+     * @return true if this agent on move
+     */
     public boolean isMoving() {
         return this._curr_edge != null;
     }
 
+    /**
+     * toString method.
+     * @return agent as String
+     */
     public String toString() {
         return toJSON();
     }
 
-    public String toString1() {
-        String ans = "" + this.getID() + "," + _pos + ", " + isMoving() + "," + this.getValue();
-        return ans;
-    }
-
+    /**
+     * Return this agent id.
+     * @return id
+     */
     public int getID() {
-        // TODO Auto-generated method stub
         return this._id;
     }
 
+    /**
+     * Return this agent position as a 3DPoint.
+     * @return geo_location associated with this agent
+     */
     public geo_location getLocation() {
-        // TODO Auto-generated method stub
         return _pos;
     }
 
-
+    /**
+     * Return this agent current value.
+     * @return the value associated with this agent
+     */
     public double getValue() {
-        // TODO Auto-generated method stub
         return this._value;
     }
 
-
+    /**
+     * Return this agent next node.
+     * If agent not on edge that means he is not moving, return -1
+     * @return
+     */
     public int getNextNode() {
-        int ans = -2;
+        int ans;
         if (this._curr_edge == null) {
             ans = -1;
         } else {
@@ -144,50 +199,45 @@ public class CL_Agent {
         return ans;
     }
 
+    /**
+     * Return this agent current speed(1,2,5)/
+     * @return the speed associated with this agent
+     */
     public double getSpeed() {
         return this._speed;
     }
 
+    /**
+     * Allows set this agent speed
+     * Used just in the constructor - setSpeed to be 0
+     * @param v - the new speed
+     */
     public void setSpeed(double v) {
         this._speed = v;
     }
 
+    /**
+     * Return this agent fruit(Pokemon).
+     * @return CK_Pokemon
+     */
     public CL_Pokemon get_curr_fruit() {
         return _curr_fruit;
     }
 
+    /**
+     * Allows set a CL_Pokemon that this agent want to eat/
+     * @param curr_fruit - a Pokemon
+     */
     public void set_curr_fruit(CL_Pokemon curr_fruit) {
         this._curr_fruit = curr_fruit;
     }
 
-    public void set_SDT(long ddtt) {
-        long ddt = ddtt;
-        if (this._curr_edge != null) {
-            double w = get_curr_edge().getWeight();
-            geo_location dest = _gg.getNode(get_curr_edge().getDest()).getLocation();
-            geo_location src = _gg.getNode(get_curr_edge().getSrc()).getLocation();
-            double de = src.distance(dest);
-            double dist = _pos.distance(dest);
-            if (this.get_curr_fruit().get_edge() == this.get_curr_edge()) {
-                dist = _curr_fruit.getLocation().distance(this._pos);
-            }
-            double norm = dist / de;
-            double dt = w * norm / this.getSpeed();
-            ddt = (long) (1000.0 * dt);
-        }
-        this.set_sg_dt(ddt);
-    }
-
+    /**
+     * Return this agent current edge
+     * @return edge_data
+     */
     public edge_data get_curr_edge() {
         return this._curr_edge;
-    }
-
-    public long get_sg_dt() {
-        return _sg_dt;
-    }
-
-    public void set_sg_dt(long _sg_dt) {
-        this._sg_dt = _sg_dt;
     }
 
 }
