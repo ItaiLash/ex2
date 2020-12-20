@@ -327,7 +327,8 @@ This classes allows graphic display of the game:
 4. Updates the cumulative score.
 5. Allows the screen to refresh in order to see the agents progressing on the sides of the graph
 
-> In the wiki label you can find more info about the game/
+>
+> **In the wiki label you can find more info about the game**
 >
 
 ## External info:
