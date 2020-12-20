@@ -454,7 +454,6 @@ public class Ex2 implements Runnable {
      * @param poks The list of Pokemon from which we want to select a Pokemon.
      * @return List of Pokemon sorted by priority queue by their value.
      */
-    public PriorityQueue<CL_Pokemon>
     public PriorityQueue<CL_Pokemon> mostValuePok(ArrayList<CL_Pokemon> poks) {
         PriorityQueue<CL_Pokemon> pq = new PriorityQueue<>(poks.size(), (o1, o2) -> {
             if (o1.getValue() < o2.getValue()) {
