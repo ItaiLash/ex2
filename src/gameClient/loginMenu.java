@@ -23,7 +23,7 @@ public class loginMenu implements ActionListener {
     public int id;
     public int scenario;
 
-    public void chose(){
+    public void show(){
         JFrame frame = new JFrame();
         frame.setSize(300, 150);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

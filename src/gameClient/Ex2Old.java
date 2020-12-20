@@ -22,7 +22,7 @@ public class Ex2Old implements Runnable {
 
     public static void main(String[] args) {
         loginMenu login = new loginMenu();
-        login.chose();
+        login.show();
         while (login.isOn) {
             System.out.print("");
         }

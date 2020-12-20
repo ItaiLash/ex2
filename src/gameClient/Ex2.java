@@ -41,7 +41,7 @@ public class Ex2 implements Runnable {
         }
         else{
             loginMenu login = new loginMenu();
-            login.chose();
+            login.show();
             while(login.isOn) {
                 System.out.print("");
             }
